@@ -62,3 +62,10 @@ Access at `http://localhost:6006`
 - Image upload works only when editing products
 - Uses React Query for data management
 - Material-UI for consistent UI
+
+# Screenshots 
+
+![Dashboard](./public/dashboard.png)
+![Products](./public/products.png)
+![Categories](./public/categories.png)
+![Orders](./public/orders.png)
