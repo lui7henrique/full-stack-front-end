@@ -1,19 +1,26 @@
 import {
   Category as CategoriesIcon,
+  DarkMode as DarkModeIcon,
   Dashboard as DashboardIcon,
+  LightMode as LightModeIcon,
   ShoppingCart as OrdersIcon,
   Inventory as ProductsIcon,
+  AccountCircle as UserIcon,
 } from '@mui/icons-material';
 import {
+  AppBar,
   Box,
   Drawer,
+  IconButton,
   List,
   ListItem,
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Toolbar,
 } from '@mui/material';
 import { Link, Outlet } from 'react-router-dom';
+import { useTheme } from '../../contexts/theme-context';
 
 const DRAWER_WIDTH = 240;
 
@@ -25,6 +32,8 @@ const MENU_ITEMS = [
 ];
 
 export function Layout(): JSX.Element {
+  const { toggleTheme, isDarkMode } = useTheme();
+
   return (
     <Box sx={{ display: 'flex' }}>
       <Drawer
@@ -54,11 +63,20 @@ export function Layout(): JSX.Element {
         component="main"
         sx={{
           flexGrow: 1,
-          p: 3,
           width: `calc(100% - ${DRAWER_WIDTH}px)`,
         }}
       >
-        <Outlet />
+        <AppBar position="static" elevation={1}>
+          <Toolbar sx={{ justifyContent: 'flex-end', gap: 1 }}>
+            <IconButton onClick={toggleTheme} color="inherit">
+              {isDarkMode ? <LightModeIcon /> : <DarkModeIcon />}
+            </IconButton>
+          </Toolbar>
+        </AppBar>
+
+        <Box sx={{ p: 3 }}>
+          <Outlet />
+        </Box>
       </Box>
     </Box>
   );
