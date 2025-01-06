@@ -29,8 +29,10 @@
   "javascript": {
     "formatter": {
       "quoteStyle": "single",
-      "trailingComma": "all",
       "semicolons": "always"
     }
+  },
+  "files": {
+    "ignore": ["node_modules", ".turbo", ".next", "src/generated/*.ts"]
   }
-} 
+}

@@ -1,5 +1,5 @@
 import { Typography } from '@mui/material';
 
-export function Dashboard(): JSX.Element {
+export function Dashboard() {
   return <Typography variant="h4">Dashboard</Typography>;
 }

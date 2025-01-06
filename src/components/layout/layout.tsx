@@ -31,7 +31,7 @@ const MENU_ITEMS = [
   { text: 'Orders', path: '/orders', icon: <OrdersIcon /> },
 ];
 
-export function Layout(): JSX.Element {
+export function Layout() {
   const { toggleTheme, isDarkMode } = useTheme();
 
   return (
