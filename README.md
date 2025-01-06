@@ -11,7 +11,10 @@ cd full-stack-front-end
 pnpm install
 ```
 
-2. **Configure**
+2. **Configure environment variables**
+
+Create a `.env` file in the root of the project with the following content:
+
 ```env
 VITE_API_URL=http://localhost:3333
 ```
