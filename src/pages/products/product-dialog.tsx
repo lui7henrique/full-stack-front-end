@@ -118,30 +118,32 @@ export function ProductDialog({ open, onClose, onSubmit, product }: ProductDialo
             required
           />
 
-          <Box sx={{ mt: 2, mb: 2 }}>
-            <input
-              accept="image/*"
-              style={{ display: 'none' }}
-              id="image-upload"
-              type="file"
-              onChange={handleImageChange}
-            />
-            <label htmlFor="image-upload">
-              <Button variant="outlined" component="span">
-                Upload Image
-              </Button>
-            </label>
+          {product && (
+            <Box sx={{ mt: 2, mb: 2 }}>
+              <input
+                accept="image/*"
+                style={{ display: 'none' }}
+                id="image-upload"
+                type="file"
+                onChange={handleImageChange}
+              />
+              <label htmlFor="image-upload">
+                <Button variant="outlined" component="span">
+                  {previewUrl ? 'Change Image' : 'Upload Image'}
+                </Button>
+              </label>
 
-            {previewUrl && (
-              <Box sx={{ mt: 2 }}>
-                <img
-                  src={previewUrl}
-                  alt="Product preview"
-                  style={{ maxWidth: '100%', maxHeight: '200px', objectFit: 'contain' }}
-                />
-              </Box>
-            )}
-          </Box>
+              {previewUrl && (
+                <Box sx={{ mt: 2 }}>
+                  <img
+                    src={previewUrl}
+                    alt="Product preview"
+                    style={{ maxWidth: '100%', maxHeight: '200px', objectFit: 'contain' }}
+                  />
+                </Box>
+              )}
+            </Box>
+          )}
 
           <DialogActions>
             <Button onClick={onClose}>Cancel</Button>

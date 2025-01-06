@@ -20,13 +20,10 @@
 - [x] Implement order deletion
 
 ## KPI Dashboard
-- [ ] Implement metrics display for orders:
-  - [ ] Total number of orders
-  - [ ] Total revenue
-  - [ ] Orders by period
-    - [ ] Daily view
-    - [ ] Weekly view
-    - [ ] Monthly view
+- [x] Implement metrics display for orders:
+  - [x] Total number of orders
+  - [x] Total revenue
+  - [x] Average order value
 
 ## Component Documentation
 - [ ] Set up Storybook
