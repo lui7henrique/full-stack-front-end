@@ -26,12 +26,12 @@
   - [x] Average order value
 
 ## Component Documentation
-- [ ] Set up Storybook
-- [ ] Document main components:
-  - [ ] Table component
-    - [ ] Products table documentation
-    - [ ] Orders table documentation
-    - [ ] Categories table documentation
-  - [ ] Form component
-    - [ ] Creation form documentation
-    - [ ] Edit form documentation
+- [x] Set up Storybook
+- [x] Document main components:
+  - [x] Table component
+    - [x] Products table documentation
+    - [x] Orders table documentation
+    - [x] Categories table documentation
+  - [x] Form component
+    - [x] Creation form documentation
+    - [x] Edit form documentation
