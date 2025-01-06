@@ -5,7 +5,6 @@ import {
   LightMode as LightModeIcon,
   ShoppingCart as OrdersIcon,
   Inventory as ProductsIcon,
-  AccountCircle as UserIcon,
 } from '@mui/icons-material';
 import {
   AppBar,
@@ -19,6 +18,7 @@ import {
   ListItemText,
   Toolbar,
 } from '@mui/material';
+import { Suspense } from 'react';
 import { Link, Outlet } from 'react-router-dom';
 import { useTheme } from '../../contexts/theme-context';
 
@@ -75,7 +75,9 @@ export function Layout() {
         </AppBar>
 
         <Box sx={{ p: 3 }}>
-          <Outlet />
+          <Suspense fallback={<div>Loading...</div>}>
+            <Outlet />
+          </Suspense>
         </Box>
       </Box>
     </Box>

@@ -6,6 +6,8 @@
  * OpenAPI spec version: 1.0
  */
 export type GetDashboardMetrics200 = {
+  /** Average value per order */
+  averageOrderValue?: number;
   /** Total number of orders */
   totalOrders?: number;
   /** Total revenue from orders */
