@@ -1,15 +1,16 @@
 import {
+  Box,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
   TextField,
 } from '@mui/material';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import type { CreateProductDto, Product } from '../../generated/endpoints.schemas';
+import { useUploadProductImage } from '../../generated/products';
 
 interface ProductDialogProps {
   open: boolean;
@@ -19,11 +20,16 @@ interface ProductDialogProps {
 }
 
 export function ProductDialog({ open, onClose, onSubmit, product }: ProductDialogProps) {
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string>('');
+  const { mutateAsync: uploadImage } = useUploadProductImage();
+
   const { register, handleSubmit, reset } = useForm<CreateProductDto>({
     defaultValues: {
       name: '',
       description: '',
       price: 0,
+      imageUrl: '',
     },
   });
 
@@ -33,7 +39,10 @@ export function ProductDialog({ open, onClose, onSubmit, product }: ProductDialo
         name: '',
         description: '',
         price: 0,
+        imageUrl: '',
       });
+      setSelectedImage(null);
+      setPreviewUrl('');
       return;
     }
 
@@ -42,7 +51,9 @@ export function ProductDialog({ open, onClose, onSubmit, product }: ProductDialo
         name: product.name,
         description: product.description,
         price: product.price,
+        imageUrl: product.imageUrl,
       });
+      setPreviewUrl(product.imageUrl);
       return;
     }
 
@@ -50,15 +61,43 @@ export function ProductDialog({ open, onClose, onSubmit, product }: ProductDialo
       name: '',
       description: '',
       price: 0,
+      imageUrl: '',
     });
+    setSelectedImage(null);
+    setPreviewUrl('');
   }, [product, reset, open]);
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setSelectedImage(file);
+    setPreviewUrl(URL.createObjectURL(file));
+  };
+
+  const handleFormSubmit = handleSubmit(async (data) => {
+    let imageUrl = product?.imageUrl ?? '';
+
+    if (selectedImage && product?._id) {
+      const result = await uploadImage({
+        id: product._id,
+        data: { file: selectedImage },
+      });
+      imageUrl = result.imageUrl ?? '';
+    }
+
+    onSubmit({
+      ...data,
+      imageUrl,
+    });
+  });
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
       <DialogTitle>{product ? 'Edit Product' : 'Create Product'}</DialogTitle>
 
       <DialogContent>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleFormSubmit}>
           <TextField {...register('name')} label="Name" fullWidth margin="normal" required />
 
           <TextField
@@ -78,6 +117,31 @@ export function ProductDialog({ open, onClose, onSubmit, product }: ProductDialo
             type="number"
             required
           />
+
+          <Box sx={{ mt: 2, mb: 2 }}>
+            <input
+              accept="image/*"
+              style={{ display: 'none' }}
+              id="image-upload"
+              type="file"
+              onChange={handleImageChange}
+            />
+            <label htmlFor="image-upload">
+              <Button variant="outlined" component="span">
+                Upload Image
+              </Button>
+            </label>
+
+            {previewUrl && (
+              <Box sx={{ mt: 2 }}>
+                <img
+                  src={previewUrl}
+                  alt="Product preview"
+                  style={{ maxWidth: '100%', maxHeight: '200px', objectFit: 'contain' }}
+                />
+              </Box>
+            )}
+          </Box>
 
           <DialogActions>
             <Button onClick={onClose}>Cancel</Button>

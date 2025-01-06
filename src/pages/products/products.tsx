@@ -110,6 +110,7 @@ export function Products() {
         <Table>
           <TableHead>
             <TableRow>
+              <TableCell>Image</TableCell>
               <TableCell>Name</TableCell>
               <TableCell>Description</TableCell>
               <TableCell align="right">Price</TableCell>
@@ -120,6 +121,17 @@ export function Products() {
           <TableBody>
             {products.map((product) => (
               <TableRow key={product._id}>
+                <TableCell>
+                  <a href={product.imageUrl} target="_blank" rel="noopener noreferrer">
+                    {product.imageUrl && (
+                      <img
+                        src={product.imageUrl}
+                        alt={product.name}
+                        style={{ width: '50px', height: '50px', objectFit: 'cover' }}
+                      />
+                    )}
+                  </a>
+                </TableCell>
                 <TableCell>{product.name}</TableCell>
                 <TableCell>{product.description}</TableCell>
                 <TableCell align="right">${product.price.toFixed(2)}</TableCell>

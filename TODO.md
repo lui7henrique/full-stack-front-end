@@ -14,15 +14,14 @@
 - [x] Implement category deletion
 
 ### Orders
-- [ ] Implement order listing
-- [ ] Create order creation form
-- [ ] Create order editing form
-- [ ] Implement order deletion
+- [x] Implement order listing
+- [x] Create order creation form
+- [x] Create order editing form
+- [x] Implement order deletion
 
 ## KPI Dashboard
 - [ ] Implement metrics display for orders:
   - [ ] Total number of orders
-  - [ ] Average order value
   - [ ] Total revenue
   - [ ] Orders by period
     - [ ] Daily view
