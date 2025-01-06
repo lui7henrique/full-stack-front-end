@@ -27,8 +27,18 @@ import type {
 } from '@tanstack/react-query'
 import type {
   CreateOrderDto,
-  Order,
   UpdateOrderDto
+} from './endpoints.schemas'
+import {
+  faker
+} from '@faker-js/faker'
+import {
+  HttpResponse,
+  delay,
+  http
+} from 'msw'
+import type {
+  Order
 } from './endpoints.schemas'
 import { axiosInstance } from '../services/axios-instance';
 
@@ -453,3 +463,81 @@ const {mutation: mutationOptions} = options ?? {};
       return useMutation(mutationOptions);
     }
     
+
+export const getCreateOrderResponseMock = (overrideResponse: Partial< Order > = {}): Order => ({_id: faker.string.alpha(20), date: `${faker.date.past().toISOString().split('.')[0]}Z`, productIds: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => (faker.string.alpha(20))), total: faker.number.int({min: undefined, max: undefined}), ...overrideResponse})
+
+export const getGetOrdersResponseMock = (): Order[] => (Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({_id: faker.string.alpha(20), date: `${faker.date.past().toISOString().split('.')[0]}Z`, productIds: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => (faker.string.alpha(20))), total: faker.number.int({min: undefined, max: undefined})})))
+
+export const getGetOrderResponseMock = (overrideResponse: Partial< Order > = {}): Order => ({_id: faker.string.alpha(20), date: `${faker.date.past().toISOString().split('.')[0]}Z`, productIds: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => (faker.string.alpha(20))), total: faker.number.int({min: undefined, max: undefined}), ...overrideResponse})
+
+export const getUpdateOrderResponseMock = (overrideResponse: Partial< Order > = {}): Order => ({_id: faker.string.alpha(20), date: `${faker.date.past().toISOString().split('.')[0]}Z`, productIds: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => (faker.string.alpha(20))), total: faker.number.int({min: undefined, max: undefined}), ...overrideResponse})
+
+export const getDeleteOrderResponseMock = (overrideResponse: Partial< Order > = {}): Order => ({_id: faker.string.alpha(20), date: `${faker.date.past().toISOString().split('.')[0]}Z`, productIds: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => (faker.string.alpha(20))), total: faker.number.int({min: undefined, max: undefined}), ...overrideResponse})
+
+
+export const getCreateOrderMockHandler = (overrideResponse?: Order | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<Order> | Order)) => {
+  return http.post('*/orders', async (info) => {await delay(1000);
+  
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
+            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
+            : getCreateOrderResponseMock()),
+      { status: 201,
+        headers: { 'Content-Type': 'application/json' }
+      })
+  })
+}
+
+export const getGetOrdersMockHandler = (overrideResponse?: Order[] | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<Order[]> | Order[])) => {
+  return http.get('*/orders', async (info) => {await delay(1000);
+  
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
+            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
+            : getGetOrdersResponseMock()),
+      { status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      })
+  })
+}
+
+export const getGetOrderMockHandler = (overrideResponse?: Order | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<Order> | Order)) => {
+  return http.get('*/orders/:id', async (info) => {await delay(1000);
+  
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
+            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
+            : getGetOrderResponseMock()),
+      { status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      })
+  })
+}
+
+export const getUpdateOrderMockHandler = (overrideResponse?: Order | ((info: Parameters<Parameters<typeof http.put>[1]>[0]) => Promise<Order> | Order)) => {
+  return http.put('*/orders/:id', async (info) => {await delay(1000);
+  
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
+            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
+            : getUpdateOrderResponseMock()),
+      { status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      })
+  })
+}
+
+export const getDeleteOrderMockHandler = (overrideResponse?: Order | ((info: Parameters<Parameters<typeof http.delete>[1]>[0]) => Promise<Order> | Order)) => {
+  return http.delete('*/orders/:id', async (info) => {await delay(1000);
+  
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
+            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
+            : getDeleteOrderResponseMock()),
+      { status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      })
+  })
+}
+export const getOrdersMock = () => [
+  getCreateOrderMockHandler(),
+  getGetOrdersMockHandler(),
+  getGetOrderMockHandler(),
+  getUpdateOrderMockHandler(),
+  getDeleteOrderMockHandler()
+]

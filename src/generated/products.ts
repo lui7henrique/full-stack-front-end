@@ -27,10 +27,20 @@ import type {
 } from '@tanstack/react-query'
 import type {
   CreateProductDto,
-  Product,
   UpdateProductDto,
-  UploadProductImage200,
   UploadProductImageBody
+} from './endpoints.schemas'
+import {
+  faker
+} from '@faker-js/faker'
+import {
+  HttpResponse,
+  delay,
+  http
+} from 'msw'
+import type {
+  Product,
+  UploadProductImage200
 } from './endpoints.schemas'
 import { axiosInstance } from '../services/axios-instance';
 
@@ -512,3 +522,96 @@ const {mutation: mutationOptions} = options ?? {};
       return useMutation(mutationOptions);
     }
     
+
+export const getCreateProductResponseMock = (overrideResponse: Partial< Product > = {}): Product => ({__v: faker.number.int({min: undefined, max: undefined}), _id: faker.string.alpha(20), categoryIds: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => (faker.string.alpha(20))), description: faker.string.alpha(20), imageUrl: faker.string.alpha(20), name: faker.string.alpha(20), price: faker.number.int({min: undefined, max: undefined}), ...overrideResponse})
+
+export const getGetProductsResponseMock = (): Product[] => (Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({__v: faker.number.int({min: undefined, max: undefined}), _id: faker.string.alpha(20), categoryIds: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => (faker.string.alpha(20))), description: faker.string.alpha(20), imageUrl: faker.string.alpha(20), name: faker.string.alpha(20), price: faker.number.int({min: undefined, max: undefined})})))
+
+export const getGetProductResponseMock = (overrideResponse: Partial< Product > = {}): Product => ({__v: faker.number.int({min: undefined, max: undefined}), _id: faker.string.alpha(20), categoryIds: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => (faker.string.alpha(20))), description: faker.string.alpha(20), imageUrl: faker.string.alpha(20), name: faker.string.alpha(20), price: faker.number.int({min: undefined, max: undefined}), ...overrideResponse})
+
+export const getUpdateProductResponseMock = (overrideResponse: Partial< Product > = {}): Product => ({__v: faker.number.int({min: undefined, max: undefined}), _id: faker.string.alpha(20), categoryIds: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => (faker.string.alpha(20))), description: faker.string.alpha(20), imageUrl: faker.string.alpha(20), name: faker.string.alpha(20), price: faker.number.int({min: undefined, max: undefined}), ...overrideResponse})
+
+export const getDeleteProductResponseMock = (overrideResponse: Partial< Product > = {}): Product => ({__v: faker.number.int({min: undefined, max: undefined}), _id: faker.string.alpha(20), categoryIds: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => (faker.string.alpha(20))), description: faker.string.alpha(20), imageUrl: faker.string.alpha(20), name: faker.string.alpha(20), price: faker.number.int({min: undefined, max: undefined}), ...overrideResponse})
+
+export const getUploadProductImageResponseMock = (overrideResponse: Partial< UploadProductImage200 > = {}): UploadProductImage200 => ({imageUrl: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), ...overrideResponse})
+
+
+export const getCreateProductMockHandler = (overrideResponse?: Product | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<Product> | Product)) => {
+  return http.post('*/products', async (info) => {await delay(1000);
+  
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
+            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
+            : getCreateProductResponseMock()),
+      { status: 201,
+        headers: { 'Content-Type': 'application/json' }
+      })
+  })
+}
+
+export const getGetProductsMockHandler = (overrideResponse?: Product[] | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<Product[]> | Product[])) => {
+  return http.get('*/products', async (info) => {await delay(1000);
+  
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
+            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
+            : getGetProductsResponseMock()),
+      { status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      })
+  })
+}
+
+export const getGetProductMockHandler = (overrideResponse?: Product | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<Product> | Product)) => {
+  return http.get('*/products/:id', async (info) => {await delay(1000);
+  
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
+            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
+            : getGetProductResponseMock()),
+      { status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      })
+  })
+}
+
+export const getUpdateProductMockHandler = (overrideResponse?: Product | ((info: Parameters<Parameters<typeof http.put>[1]>[0]) => Promise<Product> | Product)) => {
+  return http.put('*/products/:id', async (info) => {await delay(1000);
+  
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
+            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
+            : getUpdateProductResponseMock()),
+      { status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      })
+  })
+}
+
+export const getDeleteProductMockHandler = (overrideResponse?: Product | ((info: Parameters<Parameters<typeof http.delete>[1]>[0]) => Promise<Product> | Product)) => {
+  return http.delete('*/products/:id', async (info) => {await delay(1000);
+  
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
+            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
+            : getDeleteProductResponseMock()),
+      { status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      })
+  })
+}
+
+export const getUploadProductImageMockHandler = (overrideResponse?: UploadProductImage200 | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<UploadProductImage200> | UploadProductImage200)) => {
+  return http.post('*/products/:id/image', async (info) => {await delay(1000);
+  
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
+            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
+            : getUploadProductImageResponseMock()),
+      { status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      })
+  })
+}
+export const getProductsMock = () => [
+  getCreateProductMockHandler(),
+  getGetProductsMockHandler(),
+  getGetProductMockHandler(),
+  getUpdateProductMockHandler(),
+  getDeleteProductMockHandler(),
+  getUploadProductImageMockHandler()
+]

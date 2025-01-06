@@ -19,6 +19,7 @@ module.exports = {
           useSuspenseInfiniteQuery: false,
         },
       },
+      mock: true,
     },
   },
 };

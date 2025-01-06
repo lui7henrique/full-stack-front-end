@@ -25,6 +25,12 @@ pnpm run dev
 ```
 Access at `http://localhost:5173`
 
+4. **Storybook**
+```bash
+pnpm run storybook
+```
+Access at `http://localhost:6006`
+
 ## Features
 
 - Dashboard metrics (orders, revenue, average value)
@@ -47,6 +53,8 @@ Access at `http://localhost:5173`
 - `pnpm build` - Production build
 - `pnpm format` - Format code
 - `pnpm check` - Lint and fix
+- `pnpm storybook` - Run Storybook development server
+- `pnpm build-storybook` - Build Storybook for production
 
 ## Notes
 

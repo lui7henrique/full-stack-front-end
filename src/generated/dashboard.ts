@@ -22,8 +22,18 @@ import type {
   UseSuspenseQueryResult
 } from '@tanstack/react-query'
 import type {
-  GetDashboardMetrics200,
   GetDashboardMetricsParams
+} from './endpoints.schemas'
+import {
+  faker
+} from '@faker-js/faker'
+import {
+  HttpResponse,
+  delay,
+  http
+} from 'msw'
+import type {
+  GetDashboardMetrics200
 } from './endpoints.schemas'
 import { axiosInstance } from '../services/axios-instance';
 
@@ -163,3 +173,22 @@ export function useGetDashboardMetricsSuspense<TData = Awaited<ReturnType<typeof
 
 
 
+
+
+export const getGetDashboardMetricsResponseMock = (overrideResponse: Partial< GetDashboardMetrics200 > = {}): GetDashboardMetrics200 => ({averageOrderValue: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), totalOrders: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), totalRevenue: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), ...overrideResponse})
+
+
+export const getGetDashboardMetricsMockHandler = (overrideResponse?: GetDashboardMetrics200 | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetDashboardMetrics200> | GetDashboardMetrics200)) => {
+  return http.get('*/dashboard/metrics', async (info) => {await delay(1000);
+  
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
+            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
+            : getGetDashboardMetricsResponseMock()),
+      { status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      })
+  })
+}
+export const getDashboardMock = () => [
+  getGetDashboardMetricsMockHandler()
+]

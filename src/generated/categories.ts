@@ -26,9 +26,19 @@ import type {
   UseSuspenseQueryResult
 } from '@tanstack/react-query'
 import type {
-  Category,
   CreateCategoryDto,
   UpdateCategoryDto
+} from './endpoints.schemas'
+import {
+  faker
+} from '@faker-js/faker'
+import {
+  HttpResponse,
+  delay,
+  http
+} from 'msw'
+import type {
+  Category
 } from './endpoints.schemas'
 import { axiosInstance } from '../services/axios-instance';
 
@@ -453,3 +463,81 @@ const {mutation: mutationOptions} = options ?? {};
       return useMutation(mutationOptions);
     }
     
+
+export const getCreateCategoryResponseMock = (overrideResponse: Partial< Category > = {}): Category => ({_id: faker.string.alpha(20), name: faker.string.alpha(20), ...overrideResponse})
+
+export const getGetCategoriesResponseMock = (): Category[] => (Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({_id: faker.string.alpha(20), name: faker.string.alpha(20)})))
+
+export const getGetCategoryResponseMock = (overrideResponse: Partial< Category > = {}): Category => ({_id: faker.string.alpha(20), name: faker.string.alpha(20), ...overrideResponse})
+
+export const getUpdateCategoryResponseMock = (overrideResponse: Partial< Category > = {}): Category => ({_id: faker.string.alpha(20), name: faker.string.alpha(20), ...overrideResponse})
+
+export const getDeleteCategoryResponseMock = (overrideResponse: Partial< Category > = {}): Category => ({_id: faker.string.alpha(20), name: faker.string.alpha(20), ...overrideResponse})
+
+
+export const getCreateCategoryMockHandler = (overrideResponse?: Category | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<Category> | Category)) => {
+  return http.post('*/categories', async (info) => {await delay(1000);
+  
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
+            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
+            : getCreateCategoryResponseMock()),
+      { status: 201,
+        headers: { 'Content-Type': 'application/json' }
+      })
+  })
+}
+
+export const getGetCategoriesMockHandler = (overrideResponse?: Category[] | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<Category[]> | Category[])) => {
+  return http.get('*/categories', async (info) => {await delay(1000);
+  
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
+            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
+            : getGetCategoriesResponseMock()),
+      { status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      })
+  })
+}
+
+export const getGetCategoryMockHandler = (overrideResponse?: Category | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<Category> | Category)) => {
+  return http.get('*/categories/:id', async (info) => {await delay(1000);
+  
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
+            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
+            : getGetCategoryResponseMock()),
+      { status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      })
+  })
+}
+
+export const getUpdateCategoryMockHandler = (overrideResponse?: Category | ((info: Parameters<Parameters<typeof http.put>[1]>[0]) => Promise<Category> | Category)) => {
+  return http.put('*/categories/:id', async (info) => {await delay(1000);
+  
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
+            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
+            : getUpdateCategoryResponseMock()),
+      { status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      })
+  })
+}
+
+export const getDeleteCategoryMockHandler = (overrideResponse?: Category | ((info: Parameters<Parameters<typeof http.delete>[1]>[0]) => Promise<Category> | Category)) => {
+  return http.delete('*/categories/:id', async (info) => {await delay(1000);
+  
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
+            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
+            : getDeleteCategoryResponseMock()),
+      { status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      })
+  })
+}
+export const getCategoriesMock = () => [
+  getCreateCategoryMockHandler(),
+  getGetCategoriesMockHandler(),
+  getGetCategoryMockHandler(),
+  getUpdateCategoryMockHandler(),
+  getDeleteCategoryMockHandler()
+]

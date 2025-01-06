@@ -119,32 +119,42 @@ export function Products() {
           </TableHead>
 
           <TableBody>
-            {products.map((product) => (
-              <TableRow key={product._id}>
-                <TableCell>
-                  <a href={product.imageUrl} target="_blank" rel="noopener noreferrer">
-                    {product.imageUrl && (
-                      <img
-                        src={product.imageUrl}
-                        alt={product.name}
-                        style={{ width: '50px', height: '50px', objectFit: 'cover' }}
-                      />
-                    )}
-                  </a>
-                </TableCell>
-                <TableCell>{product.name}</TableCell>
-                <TableCell>{product.description}</TableCell>
-                <TableCell align="right">${product.price.toFixed(2)}</TableCell>
-                <TableCell align="right">
-                  <Button size="small" onClick={() => handleOpenDialog(product)}>
-                    Edit
-                  </Button>
-                  <Button size="small" color="error" onClick={() => handleDelete(product._id)}>
-                    Delete
-                  </Button>
+            {products.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={5} align="center" sx={{ py: 3 }}>
+                  <Typography variant="body1" color="text.secondary">
+                    No products found. Click "Add Product" to create one.
+                  </Typography>
                 </TableCell>
               </TableRow>
-            ))}
+            ) : (
+              products.map((product) => (
+                <TableRow key={product._id}>
+                  <TableCell>
+                    <a href={product.imageUrl} target="_blank" rel="noopener noreferrer">
+                      {product.imageUrl && (
+                        <img
+                          src={product.imageUrl}
+                          alt={product.name}
+                          style={{ width: '50px', height: '50px', objectFit: 'cover' }}
+                        />
+                      )}
+                    </a>
+                  </TableCell>
+                  <TableCell>{product.name}</TableCell>
+                  <TableCell>{product.description}</TableCell>
+                  <TableCell align="right">${product.price.toFixed(2)}</TableCell>
+                  <TableCell align="right">
+                    <Button size="small" onClick={() => handleOpenDialog(product)}>
+                      Edit
+                    </Button>
+                    <Button size="small" color="error" onClick={() => handleDelete(product._id)}>
+                      Delete
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
       </TableContainer>
