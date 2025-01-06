@@ -1,17 +1,17 @@
 ## Main Pages
 
 ### Products
-- [ ] Implement product listing
-- [ ] Create product creation form
-- [ ] Create product editing form
-- [ ] Implement product deletion
+- [x] Implement product listing
+- [x] Create product creation form
+- [x] Create product editing form
+- [x] Implement product deletion
 - [ ] Add image upload functionality
 
 ### Categories
-- [ ] Implement category listing
-- [ ] Create category creation form
-- [ ] Create category editing form
-- [ ] Implement category deletion
+- [x] Implement category listing
+- [x] Create category creation form
+- [x] Create category editing form
+- [x] Implement category deletion
 
 ### Orders
 - [ ] Implement order listing

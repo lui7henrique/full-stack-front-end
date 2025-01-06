@@ -54,7 +54,7 @@ export function ProductDialog({ open, onClose, onSubmit, product }: ProductDialo
   }, [product, reset, open]);
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="sm">
+    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
       <DialogTitle>{product ? 'Edit Product' : 'Create Product'}</DialogTitle>
 
       <DialogContent>
